@@ -1,7 +1,7 @@
 {
   "name": "scrollTo",
   "version": "0.1.0",
-  "description": "A vanilla JS smooth scroll script",
+  "description": "A vanilla JS smooth scrolling plugin",
   "main": "scrollTo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
