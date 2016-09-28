@@ -71,4 +71,4 @@ const _scroller = new scroller();
 
 let scrollTo = _scroller.scrollTo.bind(_scroller);
 
-export default scrollTo;
+module.exports = scrollTo;
