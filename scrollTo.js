@@ -1,47 +1,73 @@
 const requestAnimationFrame =
-	window.requestAnimationFrame ||
+  window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   function(fn) { window.setTimeout(fn, 15); };
 
-function easeInOutCubic(t) {
-	return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-}
-
-function getTop(el) {
-	return el.getBoundingClientRect().top + window.pageYOffset;
-}
-
-function getPosition(start, end, elapsed, duration) {
-  if (elapsed > duration) return end;
-  return start + (end - start) * easeInOutCubic(elapsed / duration);
-}
-
-function scrollTo(el, duration, callback, context){
-  duration = duration || 500;
-  context = context || window;
-  const start = window.pageYOffset,
-  			end = typeof el === 'number' ? parseInt(el) : getTop(el),
-  			clock = Date.now();;
-
-	function step() {
-    const elapsed = Date.now() - clock;
-    if (context !== window) {
-    	context.scrollTop = getPosition(start, end, elapsed, duration);
-    }
-    else {
-    	window.scroll(0, getPosition(start, end, elapsed, duration));
-    }
-
-    if (elapsed > duration) {
-        if (typeof callback === 'function') {
-            callback(el);
-        }
-    } else {
-        requestAnimationFrame(step);
-    }
+const easings = {
+  easeInOutCubic: function easeInOutCubic(t) {
+    return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
   }
-  step();
+};
+
+function scroller() {
+  this.defaultOpts = {
+    duration: 500,
+    easing: 'easeInOutCubic',
+    callback: null,
+    context: window
+  };
 }
+
+scroller.prototype = {
+  scrollTo(element, options) {
+    const { duration, easing, callback, context } = this.parseOptions(options),
+          easeFn = easings[easing],
+          start = window.pageYOffset,
+          end = typeof element === 'number' ? parseInt(element) : this.getTop(element),
+          clock = Date.now(),
+
+    step = () => {
+      const elapsed = Date.now() - clock;
+      if (context !== window) {
+        context.scrollTop = this.getPosition(start, end, elapsed, duration, easeFn);
+      }
+      else {
+        window.scroll(0, this.getPosition(start, end, elapsed, duration, easeFn));
+      }
+
+      if (elapsed > duration) {
+          if (typeof callback === 'function') {
+              callback(element);
+          }
+      } else {
+          requestAnimationFrame(step);
+      }
+    };
+    step();
+  },
+
+  getTop(element) {
+    return element.getBoundingClientRect().top + window.pageYOffset;
+  },
+
+  getPosition(start, end, elapsed, duration, easeFn) {
+    if (elapsed > duration) return end;
+    return start + (end - start) * easeFn(elapsed / duration);
+  },
+
+  parseOptions(userOpts) {
+    if (typeof userOpts === 'undefined') return this.defaultOpts;
+    let ret = {};
+    for (let opt in this.defaultOpts) {
+      ret[opt] = (typeof userOpts[opt] !== 'undefined') ? userOpts[opt] : this.defaultOpts[opt];
+    }
+    return ret;
+  }
+}
+
+const _scroller = new scroller();
+
+let scrollTo = _scroller.scrollTo.bind(_scroller);
 
 export default scrollTo;
