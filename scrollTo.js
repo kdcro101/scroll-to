@@ -14,6 +14,7 @@ function scroller() {
   this.defaultOpts = {
     duration: 500,
     easing: 'easeInOutCubic',
+    offset: 0,
     callback: null,
     context: window
   };
@@ -21,10 +22,10 @@ function scroller() {
 
 scroller.prototype = {
   scrollTo(element, options) {
-    const { duration, easing, callback, context } = this.parseOptions(options),
+    const { duration, easing, offset, callback, context } = this.parseOptions(options),
           easeFn = easings[easing],
           start = window.pageYOffset,
-          end = typeof element === 'number' ? parseInt(element) : this.getTop(element),
+          end = typeof element === 'number' ? parseInt(element) : this.getTop(element, offset),
           clock = Date.now(),
 
     step = () => {
@@ -38,7 +39,7 @@ scroller.prototype = {
 
       if (elapsed > duration) {
           if (typeof callback === 'function') {
-              callback(element);
+            callback(element);
           }
       } else {
           requestAnimationFrame(step);
@@ -47,8 +48,8 @@ scroller.prototype = {
     step();
   },
 
-  getTop(element) {
-    return element.getBoundingClientRect().top + window.pageYOffset;
+  getTop(element, offset) {
+    return element.getBoundingClientRect().top + window.pageYOffset - offset;
   },
 
   getPosition(start, end, elapsed, duration, easeFn) {
