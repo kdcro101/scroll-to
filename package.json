@@ -14,5 +14,8 @@
   "author": "Jeremy Byerly",
   "homepage": "https://github.com/jmbyerly/scroll-to#readme",
   "repository": "https://github.com/jmbyerly/scroll-to.git",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bezier-easing": "^2.0.3"
+  }
 }

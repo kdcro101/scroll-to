@@ -1,3 +1,5 @@
+import bezierEasing from 'bezier-easing';
+
 const requestAnimationFrame =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -5,15 +7,15 @@ const requestAnimationFrame =
   function(fn) { window.setTimeout(fn, 15); };
 
 const easings = {
-  easeInOutCubic: function easeInOutCubic(t) {
-    return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-  }
+  ease: bezierEasing(0.25, 0.1, 0.25, 1),
+  easeOut: bezierEasing(0, 0, 0.58, 1),
+  easeInOut: bezierEasing(0.42, 0, 0.58, 1)
 };
 
 function scroller() {
   this.defaultOpts = {
     duration: 500,
-    easing: 'easeInOutCubic',
+    easing: 'easeInOut',
     offset: 0,
     callback: null,
     context: window
