@@ -1,4 +1,5 @@
 import bezierEasing from 'bezier-easing';
+import { toArray } from './util';
 
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -51,6 +52,25 @@ scroller.prototype = {
     step();
   },
 
+  autobindAnchorLinks(options) {
+    const onStartScroll = options && options.onStartScroll ? options.onStartScroll : null;
+    this.anchorLinks = toArray(document.querySelectorAll('a[href^="#"]:not([href="#"])'));
+    this.anchorTargets = this.anchorLinks.map(link => document.querySelector(link.hash));
+
+    this.anchorLinks.forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const anchorLink = event.currentTarget,
+              scrollTarget = this.anchorTargets.find(target => target.id === anchorLink.hash.substring(1));
+
+        onStartScroll ? onStartScroll(anchorLink, scrollTarget) : null;
+        this.scrollTo(scrollTarget, options);
+      });
+    });
+  },
+
   getTop(element, offset) {
     return element.getBoundingClientRect().top + window.pageYOffset - offset;
   },
@@ -73,5 +93,6 @@ scroller.prototype = {
 const _scroller = new scroller();
 
 let scrollTo = _scroller.scrollTo.bind(_scroller);
+scrollTo.autobindAnchorLinks = _scroller.autobindAnchorLinks.bind(_scroller);
 
 module.exports = scrollTo;
