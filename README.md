@@ -32,7 +32,11 @@ The scroll target can be either an element or a numeric position on the page.
 
 * Easing
   * The easing function of the animation
-  * For now the only option is `easeInOutCubic`. More options coming soon.
+  	* `'easeInout'` (default)
+  	* `'ease'`
+  	* `'easeOut'`
+  * Alternately, you can pass the four points of a custom bezier curve via an array:
+  	* `[0.47, 0, 0.745, 0.715]`
 
 * Offset
   * Offset from the top of the viewport to the scroll target (only valid when target is an element)
