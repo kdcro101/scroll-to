@@ -24,11 +24,12 @@ function scroller() {
 
 scroller.prototype = {
   scrollTo(element, options) {
-    const { duration, easing, offset, callback, context } = this.parseOptions(options),
-          easeFn = easings[easing],
-          start = window.pageYOffset,
-          end = typeof element === 'number' ? parseInt(element) : this.getTop(element, offset),
-          clock = Date.now(),
+    const
+      { duration, easing, offset, callback, context } = this.parseOptions(options),
+      easeFn = typeof easing === 'string' ? easings[easing] : bezierEasing.apply(bezierEasing, easing),
+      start = window.pageYOffset,
+      end = typeof element === 'number' ? parseInt(element) : this.getTop(element, offset),
+      clock = Date.now(),
 
     step = () => {
       const elapsed = Date.now() - clock;
