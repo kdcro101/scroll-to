@@ -32,7 +32,7 @@ The scroll target can be either an element or a numeric position on the page.
 
 * Easing
   * The easing function of the animation
-  	* `'easeInout'` (default)
+  	* `'easeInOut'` (default)
   	* `'ease'`
   	* `'easeOut'`
   * Alternately, you can pass the four points of a custom bezier curve via an array:
