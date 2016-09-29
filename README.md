@@ -16,7 +16,7 @@ import scrollTo from ('path/to/scrollTo');
 
 ## Basic Usage
 
-`scrollTo` accepts two parameters: the scroll target and an optional options configuration object:
+`scrollTo` accepts two parameters: the scroll target and an optional configuration object:
 
 ```js
 scrollTo(target, [options]);
@@ -49,3 +49,20 @@ The scroll target can be either an element or a numeric position on the page.
 * Context
   * The container element to be animated
   * Default: `window`
+
+___
+
+### `scrollTo.autobindAnchorLinks`
+
+A convenience method that finds all of the anchor tags that link to an element within the same page and binds a click event listener that will smooth scroll to that location.
+
+Accepts an optional configuration object with all of the same options as the primary API, with an additional field, `onStartScroll`, a callback to be invoked when the scroll animation begins. The function is passed two parameters, the `anchorLink` that was clicked on and the `scrollTarget`:
+
+```js
+scrollTo.autobindAnchorLinks({
+	easing: 'ease',
+	onStartScroll: (anchorLink, scrollTarget) => {
+		//...
+	}
+});
+```
