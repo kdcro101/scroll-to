@@ -42,11 +42,11 @@ scroller.prototype = {
       }
 
       if (elapsed > duration) {
-          if (typeof callback === 'function') {
-            callback(element);
-          }
+        if (typeof callback === 'function') {
+          callback(element);
+        }
       } else {
-          requestAnimationFrame(step);
+        requestAnimationFrame(step);
       }
     };
     step();
@@ -81,12 +81,7 @@ scroller.prototype = {
   },
 
   parseOptions(userOpts) {
-    if (typeof userOpts === 'undefined') return this.defaultOpts;
-    let ret = {};
-    for (let opt in this.defaultOpts) {
-      ret[opt] = (typeof userOpts[opt] !== 'undefined') ? userOpts[opt] : this.defaultOpts[opt];
-    }
-    return ret;
+    return Object.assign({}, this.defaultOpts, userOpts);
   }
 }
 
